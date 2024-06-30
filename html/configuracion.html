@@ -6,6 +6,9 @@
   <title>Configuración - Votaciones ADUFA</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
+  <meta http-equiv="Cache-Control" content="no-store" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
 
   <!-- Favicons -->
   <link href="../assets/img/favicon.png" rel="icon">
@@ -26,10 +29,24 @@
   <!-- Main CSS File -->
   <link href="../assets/css/main.css" rel="stylesheet">
 
-  <script language="JavaScript">
-    javascript:window.history.forward(1);
-    javascript:window.history.back(1);
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      function preventBack() {
+        window.history.forward();
+      }
+      
+      setTimeout(preventBack, 0);
+      
+      window.onunload = function() {
+        null;
+      };
+      
+      window.addEventListener('popstate', function(event) {
+        history.pushState(null, "", location.href);
+      });
+    });
   </script>
+
 </head>
 
 <body class="index-page">
