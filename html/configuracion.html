@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Configuración - Votaciones ADUFA</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="../assets/img/favicon.png" rel="icon">
+  <link href="../assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files-->
+  <link href="../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="../assets/vendor/aos/aos.css" rel="stylesheet">
+  <link href="../assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+  <link href="../assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+
+  <!-- Main CSS File -->
+  <link href="../assets/css/main.css" rel="stylesheet">
+
+  <script language="JavaScript">
+    javascript:window.history.forward(1);
+    javascript:window.history.back(1);
+  </script>
+</head>
+
+<body class="index-page">
+  <header id="header" class="header fixed-top">
+    <div class="branding d-flex align-items-center">
+      <div class="container position-relative d-flex align-items-center justify-content-between">
+        <a href="configuracion.html" class="logo d-flex align-items-center">
+          <h1 class="sitename">Votaciones ADUFA</h1>
+        </a>
+        <nav id="navmenu" class="navmenu">
+          <ul>
+            <li><a href="#about">Configuración</a></li>
+          </ul>
+          <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main class="main">
+    <section id="about" class="about section">
+      <div class="container section-title" data-aos="fade-up">
+        <span>Configuración de Votaciones<br></span>
+        <h2>Configuración de Votaciones<br></h2>
+      </div>
+
+      <div class="container">
+        <div class="row px-0" style="margin-top: -50px;">
+          <div class="col-lg-2 order-1 order-lg-1 content" data-aos="fade-up" data-aos-delay="200"></div>
+          <div class="col-lg-8 order-2 order-lg-1 content imagenFondoESPE" data-aos="fade-up" data-aos-delay="200"></div>
+          <div class="col-lg-2 order-2 order-lg-1 content" data-aos="fade-up" data-aos-delay="200"></div>
+          <div class="col-lg-2 order-1 order-lg-1 content" data-aos="fade-up" data-aos-delay="200"></div>
+          <div class="col-lg-8 order-2 order-lg-1 content form-container" data-aos="fade-up" data-aos-delay="200">
+            <div class="row">
+              <div class="col-md-12">
+                <form id="initialForm">
+                  <p style="color: rgba(255, 255, 255, 0.8); text-align: center; font-size: 12px;">En este espacio especificará el periodo de elecciones al cual desea implementar la votación electrónica, además se seleccionarán el número de candidatos por cada una de las necesidades que requiera. En caso de no requerir de alguna dignidad ponga una cantidad 0.</p>
+                  <div class="form-group row my-2">
+                    <label for="periodo" class="col-sm-4 col-form-label">Periodo de Elecciones</label>
+                    <div class="col-sm-8">
+                      <input type="text" class="form-control" id="periodo" placeholder="Ingrese el periodo de elecciones" required="1">
+                    </div>
+                  </div>
+                  <hr>
+                  <div style="background-color: white; width: 760px; margin-left: -20px;">
+                    <div style="background-color: rgba(0, 0, 0, 0.1); width: 760px; height: 15px;"></div>
+                  </div>
+                  <div class="form-group row my-2">
+                    <label for="presidente" class="col-sm-4 col-form-label" style="color: var(--accent-color);font-size: 20px;">Dignidades</label>
+                    <hr>
+                    <label for="presidente" class="col-sm-4 col-form-label">Presidente</label>
+                    <div class="col-sm-8">
+                      <input type="number" class="form-control" id="numPresidente" min="0" placeholder="Cantidad" required="1">
+                    </div>
+                  </div>
+                  <div class="form-group row my-2">
+                    <label for="vicepresidente" class="col-sm-4 col-form-label">Vicepresidente</label>
+                    <div class="col-sm-8">
+                      <input type="number" class="form-control" id="numVicepresidente" min="0" placeholder="Cantidad" required="1">
+                    </div>
+                  </div>
+                  <div class="form-group row my-2">
+                    <label for="secretario" class="col-sm-4 col-form-label">Secretario</label>
+                    <div class="col-sm-8">
+                      <input type="number" class="form-control" id="numSecretario" min="0" placeholder="Cantidad" required="1">
+                    </div>
+                  </div>
+                  <div class="form-group row my-2">
+                    <label for="subsecretario" class="col-sm-4 col-form-label">Subsecretario</label>
+                    <div class="col-sm-8">
+                      <input type="number" class="form-control" id="numSubsecretario" min="0" placeholder="Cantidad" required="1">
+                    </div>
+                  </div><br>
+                  <div class="form-group row my-2">
+                    <div class="col-sm-12 text-center">
+                      <button type="submit" class="read-more">Enviar</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            <div id="secondFormContainer" style="display: none;"></div>
+
+            <div id="thirdFormContainer" style="display: none;">
+              <h2 class="text-center mb-4">Formulario de Votación</h2>
+              <form id="votingForm">
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer id="footer" class="footer position-relative"><br>
+    <div class="container copyright text-center mt-4">
+      <p><strong class="px-1 sitename">Universidad de las Fuerzas Armadas "ESPE"</strong></p>
+      <div class="credits">
+        <strong class="px-1 sitename">Asociación de Docentes de las Fuerzas Armadas</strong> <span> 2024</span>
+      </div>
+    </div>
+  </footer>
+
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <div id="preloader"></div>
+
+  <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="../assets/vendor/php-email-form/validate.js"></script>
+  <script src="../assets/vendor/aos/aos.js"></script>
+  <script src="../assets/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="../assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="../assets/vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
+  <script src="../assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="../assets/js/main.js"></script>
+
+  <script>
+    document.getElementById('initialForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+  
+      const periodo = document.getElementById('periodo').value;
+      const numPresidente = parseInt(document.getElementById('numPresidente').value);
+      const numVicepresidente = parseInt(document.getElementById('numVicepresidente').value);
+      const numSecretario = parseInt(document.getElementById('numSecretario').value);
+      const numSubsecretario = parseInt(document.getElementById('numSubsecretario').value);
+  
+      let secondFormHtml = `
+      <p style="color: rgba(255, 255, 255, 0.8); text-align: center; font-size: 12px;">En este apartado se ingresarán cada uno de los candidatos postulados, separados por dignidades para su correcta selección.</p>
+      <h4 style="color: aliceblue;">Periodo ${periodo}</h4><form id="secondForm">
+        <br><div style="background-color: white; width: 760px; margin-left: -20px;">
+            <div style="background-color: rgba(0, 0, 0, 0.1); width: 760px; height: 15px;"></div>
+          </div>`;
+  
+      function generateFields(title, num, lista) {
+        if (num > 0) {
+          secondFormHtml += `<h4 style="color: var(--accent-color); padding-top: 15px;">${title}s</h4><hr>`;
+          for (let i = 1; i <= num; i++) {
+            secondFormHtml +=
+              `<div class="form-group row my-2">
+                <label class="col-sm-4 col-form-label">${title} ${i}</label>
+                <div class="col-sm-8">
+                  <input type="text" name="${title.toLowerCase()}${i}" class="form-control" placeholder="Nombre del ${title.toLowerCase()} ${i}" required>
+                </div>
+              </div>`;
+          }
+          secondFormHtml += `<br><div style="background-color: white; width: 760px; margin-left: -20px;">
+            <div style="background-color: rgba(0, 0, 0, 0.1); width: 760px; height: 15px;"></div>
+          </div>`;
+        }
+      }
+  
+      generateFields('Presidente', numPresidente, 0);
+      generateFields('Vicepresidente', numVicepresidente, 0);
+      generateFields('Secretario', numSecretario, 0);
+      generateFields('Subsecretario', numSubsecretario, 1);
+  
+      secondFormHtml += `<br>
+        <div class="form-group row my-2">
+          <div class="col-sm-12 text-center">
+            <button type="submit" class="read-more" id="submitButton">Enviar</button>
+            <button type="button" class="read-more" id="backButton">Regresar</button>
+          </div>
+        </div>
+      </form>`;
+  
+      document.getElementById('secondFormContainer').innerHTML = secondFormHtml;
+  
+      document.getElementById('initialForm').style.display = 'none';
+      document.getElementById('secondFormContainer').style.display = 'block';
+
+      const savedData = JSON.parse(localStorage.getItem('votacionFormData'));
+      if (savedData) {
+        Object.keys(savedData).forEach(key => {
+          const input = document.querySelector(`#secondForm [name="${key}"]`);
+          if (input) {
+            input.value = savedData[key];
+          }
+        });
+      }
+      document.getElementById('backButton').addEventListener('click', function() {
+        document.getElementById('secondFormContainer').style.display = 'none';
+        document.getElementById('initialForm').style.display = 'block';
+      });
+  
+      document.getElementById('secondForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+  
+        const formData = new FormData(this);
+        formData.append('periodo', periodo);
+  
+        const formDataObj = {};
+        formData.forEach((value, key) => {
+          formDataObj[key] = value;
+        });
+  
+        localStorage.setItem('formData', JSON.stringify(formDataObj));
+  
+        window.location.href = 'html/votacion.html';
+      });
+    });
+
+    if (window.location.search.includes('from=votacion')) {
+      document.getElementById('initialForm').style.display = 'none';
+      document.getElementById('secondFormContainer').style.display = 'block';
+
+      const savedData = JSON.parse(localStorage.getItem('votacionFormData'));
+      if (savedData) {
+        Object.keys(savedData).forEach(key => {
+          const input = document.querySelector(`#secondForm [name="${key}"]`);
+          if (input) {
+            input.value = savedData[key];
+          }
+        });
+      }
+    }
+  </script>
+</body>
+</html>
