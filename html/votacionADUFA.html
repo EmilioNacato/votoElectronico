@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Previsualización - Votaciones ADUFA</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="../assets/img/favicon.png" rel="icon">
+  <link href="../assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files-->
+  <link href="../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="../assets/vendor/aos/aos.css" rel="stylesheet">
+  <link href="../assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+  <link href="../assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+
+  <!-- Main CSS File -->
+  <link href="../assets/css/main.css" rel="stylesheet">
+  <script>
+    const rol = localStorage.getItem('rol');
+      // if (!rol || rol !== '1'|| rol !== '2') {
+      //   window.location.href = '/';
+      // }
+
+      // function preventBack() {
+      //   window.history.forward();
+      // }
+
+      // setTimeout(preventBack, 0);
+
+      // window.onunload = function() {
+      //   null;
+      // };
+
+      // window.addEventListener('popstate', function(event) {
+      //   history.pushState(null, "", location.href);
+      // });
+  </script>
+</head>
+
+<body class="index-page">
+
+  <header id="header" class="header fixed-top">
+
+    <div class="branding d-flex align-items-center">
+
+      <div class="container position-relative d-flex align-items-center justify-content-between">
+        <a href="../index.html" class="logo d-flex align-items-center">
+          <!-- Uncomment the line below if you also wish to use an image logo -->
+          <!-- <img src="assets/img/logo.png" alt=""> -->
+          <h1 class="sitename">Votaciones ADUFA</h1>
+        </a>
+
+        <nav id="navmenu" class="navmenu">
+          <ul>
+            <li><a href="#about">Configuración</a></li>
+            <li class="dropdown"><a href="#" id="username-display"> NOMBRE USUARIO <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+              <ul>
+                <li><a href="#" id="logout-button">Cerrar Sesión</a></li>
+              </ul>
+            </li>
+          </ul>
+          <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+        </nav>
+      </div>
+
+    </div>
+
+  </header>
+
+  <main class="main">
+
+    <!-- About Section -->
+    <section id="about" class="about section">
+
+      <!-- Section Title -->
+      <div class="container section-title" data-aos="fade-up">
+        <span>Previsualización Votaciones<br></span>
+        <h2>Previsualización Votaciones<br></h2>
+      </div><!-- End Section Title -->
+
+      <div class="container">
+
+        <div class="row px-0" style="margin-top: -50px;">
+          <div class="col-lg-2 order-1 order-lg-1 content" data-aos="fade-up" data-aos-delay="200"></div>
+          <div class="col-lg-8 order-2 order-lg-1 content imagenFondoESPE" data-aos="fade-up" data-aos-delay="200"></div>
+          <div class="col-lg-2 order-2 order-lg-1 content" data-aos="fade-up" data-aos-delay="200"></div>
+          <div class="col-lg-2 order-1 order-lg-1 content" data-aos="fade-up" data-aos-delay="200"></div>
+          <div class="col-lg-8 order-2 order-lg-1 content form-container"data-aos="fade-up" data-aos-delay="200">
+            <p style="text-align: center; font-size: 12px;">En esta previsualización usted confirmará los candidatos ingresados
+              previamente. De esta precisa manera es como se desplegará al votante el formulario de votación.</p>
+            <div class="row">
+              <div class="col-md-12">
+                <form id="votacionForm">
+                  <div id="checkboxesContainer"></div>
+                  <br>
+                  <div class="col-sm-12 text-center">
+                    <button type="submit" class="read-more">Enviar Voto</button>
+                    <button type="button" class="read-more" id="backButton">Regresar</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <!-- <a href="#" class="read-more"><span>Read More</span><i class="bi bi-arrow-right"></i></a> -->
+          </div>
+
+        </div>
+
+      </div>
+
+    </section><!-- /About Section -->
+
+  </main>
+
+  <footer id="footer" class="footer position-relative"><br>
+    <div class="container copyright text-center mt-4">
+      <p><strong class="px-1 sitename">Universidad de las Fuerzas Armadas "ESPE"</strong></p>
+      <div class="credits">
+        <strong class="px-1 sitename">Asociación de Docentes de las Fuerzas Armadas</strong> <span> 2024</span>
+      </div>
+    </div>
+
+  </footer>
+
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Preloader -->
+  <div id="preloader"></div>
+
+  <!-- Vendor JS Files -->
+  <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="../assets/vendor/php-email-form/validate.js"></script>
+  <script src="../assets/vendor/aos/aos.js"></script>
+  <script src="../assets/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="../assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="../assets/vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
+  <script src="../assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+
+  <!-- Main JS File -->
+  <script src="../assets/js/main.js"></script>
+
+  <script>
+    // Obtener el período desde la URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const periodo = urlParams.get('periodo');
+    const usuario = localStorage.getItem('usuario');
+
+    // Ahora puedes usar 'periodo' para cualquier lógica que necesites en tu página HTML
+    console.log(`Período seleccionado: ${periodo}`);
+
+    // Función para obtener y mostrar los candidatos
+    async function getCandidates(periodo) {
+      try {
+        const response = await fetch(`/obtener-candidatos?periodo=${periodo}`);
+        const data = await response.json();
+
+        // Renderizar los datos obtenidos en el formulario
+        const checkboxesContainer = document.getElementById('checkboxesContainer');
+        checkboxesContainer.innerHTML += `<h4 style:"font-weight: bold;">Periodo ${periodo}</h4><form id="secondForm">
+        <br><div style="background-color: white; width: 105%; margin-left: -20px;">
+              <div style="background-color: rgba(0, 0, 0, 0.1); width: 100%; height: 15px;"></div>
+            </div>`;
+
+        // Función para generar campos de radio por título
+        function generateRadioFields(title, nombres) {
+          if (nombres.length === 0) {
+            return '';
+          }
+          let radioFieldsHtml = `<h4 style="color: var(--accent-color); padding-top: 15px; font-weight: bold;">${title}</h4><hr>`;
+          nombres.forEach((nombre, index) => {
+            radioFieldsHtml += `
+              <div>
+                <input type="radio" id="${title.toLowerCase()}${index + 1}" name="${title.toLowerCase()}" value="${nombre.ID_US}">
+                <label for="${title.toLowerCase()}${index + 1}">${nombre.ID_US}</label>
+              </div>
+            `;
+          });
+
+          // Agregar campo "NULO" al final
+        radioFieldsHtml += `
+            <div>
+                <input type="radio" id="${title.toLowerCase()}Nulo" name="${title.toLowerCase()}" value="NULO">
+                <label for="${title.toLowerCase()}Nulo">NULO</label>
+            </div>
+            <br><div style="background-color: white; width: 105%; margin-left:-20px">
+              <div style="background-color: rgba(0, 0, 0, 0.1); width: 100%; height: 15px;"></div>
+            </div>
+        `;
+          return radioFieldsHtml;
+        }
+
+        checkboxesContainer.innerHTML += generateRadioFields('Presidente', data.presidente || []);
+        checkboxesContainer.innerHTML += generateRadioFields('Vicepresidente', data.vicepresidente || []);
+        checkboxesContainer.innerHTML += generateRadioFields('Secretario', data.secretario || []);
+        checkboxesContainer.innerHTML += generateRadioFields('Subsecretario', data.subsecretario || []);
+
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    }
+
+    // Llamar a la función para obtener y mostrar candidatos al cargar la página
+    document.addEventListener('DOMContentLoaded', () => {
+      getCandidates(periodo);
+    });
+
+    // Evento para regresar al formulario anterior
+    const backButton = document.getElementById('backButton');
+    backButton.addEventListener('click', () => {
+      window.history.back();
+    });
+
+    // Llamar a la API para verificar si el usuario ha votado
+    async function verificarVoto(usuario, periodo) {
+      try {
+        const response = await fetch(`/verificar-voto?usuario=${usuario}&periodo=${periodo}`);
+        const data = await response.json();
+
+        if (data.votoRealizado) {
+          // Si el usuario ya ha votado para este período, ocultar el formulario y mostrar el mensaje
+          document.getElementById('votacionForm').style.display = 'none';
+
+          const messageContainer = document.createElement('div');
+          messageContainer.classList.add('alert', 'alert-info', 'mt-3');
+          messageContainer.innerHTML = `<strong>Período:</strong> ${periodo}<br>Usted ya ha ejercido su voto para estas elecciones.`;
+
+          document.querySelector('.form-container').appendChild(messageContainer);
+        }
+      } catch (error) {
+        console.error('Error al verificar voto:', error);
+      }
+    }
+
+    // Verificar si el usuario ha votado para este período
+    if (usuario && periodo) {
+      verificarVoto(usuario, periodo);
+    }
+
+    // Evento para enviar el formulario (puedes agregar tu lógica aquí)
+    const votacionForm = document.getElementById('votacionForm');
+    votacionForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      try {
+        // Obtener el usuario desde localStorage
+        const usuario = localStorage.getItem('usuario');
+
+        // Obtener los datos del formulario
+        const formData = {
+          periodo: periodo,
+          presidente: obtenerCandidatosSeleccionados('presidente'),
+          vicepresidente: obtenerCandidatosSeleccionados('vicepresidente'),
+          secretario: obtenerCandidatosSeleccionados('secretario'),
+          subsecretario: obtenerCandidatosSeleccionados('subsecretario')
+        };
+
+        // Enviar la solicitud POST al servidor
+        const response = await fetch('/guardar-votos', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ usuario, formData })
+        });
+
+        const result = await response.json();
+        alert(result.message);
+        // Recargar la página después de mostrar la alerta
+        window.location.reload();
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Error al guardar los votos');
+      }
+    });
+
+    // Función para obtener los candidatos seleccionados por tipo
+    function obtenerCandidatosSeleccionados(tipo) {
+      const candidatos = [];
+      const checkboxes = document.querySelectorAll(`input[name=${tipo.toLowerCase()}]:checked`);
+      checkboxes.forEach((checkbox) => {
+        candidatos.push(checkbox.value);
+      });
+      return candidatos;
+    }
+    document.addEventListener('DOMContentLoaded', (event) => {
+      // Obtener el nombre del usuario desde el LocalStorage
+      const usuario = localStorage.getItem('usuario');
+
+      // Verificar si el nombre del usuario existe en el LocalStorage
+      if (usuario) {
+        // Actualizar el contenido del elemento con el ID 'username-display'
+        document.getElementById('username-display').innerHTML = `${usuario} <i class="bi bi-chevron-down toggle-dropdown"></i>`;
+      }
+      // Manejar el clic en el botón de "Cerrar Sesión"
+      document.getElementById('logout-button').addEventListener('click', function() {
+        // Borrar las variables 'rol' y 'usuario' del LocalStorage
+        localStorage.removeItem('rol');
+        localStorage.removeItem('usuario');
+        
+        // Redireccionar al index
+        window.location.href = '/';
+      });
+    });
+  </script>
+
+</body>
+
+</html>

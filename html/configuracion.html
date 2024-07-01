@@ -177,9 +177,9 @@
         <nav id="navmenu" class="navmenu">
           <ul>
             <li><a href="#about">Configuración</a></li>
-            <li class="dropdown"><a href="#"><span id="userDropdown"></span>H <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+            <li class="dropdown"><a href="#" id="username-display"> NOMBRE USUARIO <i class="bi bi-chevron-down toggle-dropdown"></i></a>
               <ul>
-                <li><a href="#">Cerrar Sesión</a></li>
+                <li><a href="#" id="logout-button">Cerrar Sesión</a></li>
               </ul>
             </li>
           </ul>
@@ -413,8 +413,8 @@
           userSelects.forEach(select => {
             data.forEach(user => {
               const option = document.createElement('option');
-              option.value = `${user.nombres} ${user.apellidos}`;
-              option.text = `${user.nombres} ${user.apellidos}`;
+              option.value = `${user.nombres}, ${user.apellidos}`;
+              option.text = `${user.nombres}, ${user.apellidos}`;
               select.appendChild(option);
             });
           });
@@ -422,14 +422,24 @@
         .catch(err => console.error('Error al obtener los usuarios:', err));
     });
 
-    document.addEventListener('DOMContentLoaded', function() {
-      // Comprobar si hay nombre de usuario almacenado en sesión
-      let username = 'Nombre';
+    document.addEventListener('DOMContentLoaded', (event) => {
+      // Obtener el nombre del usuario desde el LocalStorage
+      const usuario = localStorage.getItem('usuario');
 
-      // Actualizar el contenido del elemento userDropdown si hay un nombre de usuario
-      if (username) {
-        document.getElementById('userDropdown').textContent = username;
+      // Verificar si el nombre del usuario existe en el LocalStorage
+      if (usuario) {
+        // Actualizar el contenido del elemento con el ID 'username-display'
+        document.getElementById('username-display').innerHTML = `${usuario} <i class="bi bi-chevron-down toggle-dropdown"></i>`;
       }
+      // Manejar el clic en el botón de "Cerrar Sesión"
+      document.getElementById('logout-button').addEventListener('click', function() {
+        // Borrar las variables 'rol' y 'usuario' del LocalStorage
+        localStorage.removeItem('rol');
+        localStorage.removeItem('usuario');
+        
+        // Redireccionar al index
+        window.location.href = '/';
+      });
     });  
   </script>
 </body>

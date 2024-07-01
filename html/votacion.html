@@ -26,29 +26,32 @@
   <!-- Main CSS File -->
   <link href="../assets/css/main.css" rel="stylesheet">
   <script>
-    //document.addEventListener("DOMContentLoaded", function() {
-      //const rol = localStorage.getItem('rol');
-      // if (!rol || (rol !== '1' && rol !== '2')) {
-      //   window.location.replace('/');
+    const rol = localStorage.getItem('rol');
+      // if (!rol || rol !== '1'|| rol !== '2') {
+      //   window.location.href = '/';
       // }
 
       // function preventBack() {
       //   window.history.forward();
       // }
+      // function preventBack() {
+      //   window.history.forward();
+      // }
 
+      // setTimeout(preventBack, 0);
       // setTimeout(preventBack, 0);
 
       // window.onunload = function() {
       //   null;
       // };
+      // window.onunload = function() {
+      //   null;
+      // };
 
-     // window.addEventListener('popstate', function(event) {
-      //  history.pushState(null, "", location.href);
-     // });
-
-   // });
-</script>
-
+      // window.addEventListener('popstate', function(event) { 
+      //   history.pushState(null, "", location.href);
+      // });
+  </script>
 </head>
 
 <body class="index-page">
@@ -62,9 +65,9 @@
         <nav id="navmenu" class="navmenu">
           <ul>
             <li><a href="#about">Configuración</a></li>
-            <li class="dropdown"><a href="#"><span id="userDropdown">USUARIO</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+            <li class="dropdown"><a href="#" id="username-display"> NOMBRE USUARIO <i class="bi bi-chevron-down toggle-dropdown"></i></a>
               <ul>
-                <li><a href="#">Cerrar Sesión</a></li>
+                <li><a href="#" id="logout-button">Cerrar Sesión</a></li>
               </ul>
             </li>
           </ul>
@@ -171,6 +174,53 @@
     checkboxesContainer.innerHTML += generateRadioFields('Vicepresidente', formData.vicepresidente || []);
     checkboxesContainer.innerHTML += generateRadioFields('Secretario', formData.secretario || []);
     checkboxesContainer.innerHTML += generateRadioFields('Subsecretario', formData.subsecretario || []);
+  
+    // Evento para regresar al formulario anterior
+    const backButton = document.getElementById('backButton');
+    backButton.addEventListener('click', function() {
+        window.history.back();
+    });
+
+
+    // Evento para enviar el formulario
+    const votacionForm = document.getElementById('votacionForm');
+    votacionForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+        const formData = JSON.parse(localStorage.getItem('formData'));
+        fetch('/guardar-candidatos', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(formData)
+        })
+        .then(response => response.text())
+        .then(data => {
+          alert(data);
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+    });
+    document.addEventListener('DOMContentLoaded', (event) => {
+      // Obtener el nombre del usuario desde el LocalStorage
+      const usuario = localStorage.getItem('usuario');
+
+      // Verificar si el nombre del usuario existe en el LocalStorage
+      if (usuario) {
+        // Actualizar el contenido del elemento con el ID 'username-display'
+        document.getElementById('username-display').innerHTML = `${usuario} <i class="bi bi-chevron-down toggle-dropdown"></i>`;
+      }
+      // Manejar el clic en el botón de "Cerrar Sesión"
+      document.getElementById('logout-button').addEventListener('click', function() {
+        // Borrar las variables 'rol' y 'usuario' del LocalStorage
+        localStorage.removeItem('rol');
+        localStorage.removeItem('usuario');
+        
+        // Redireccionar al index
+        window.location.href = '/';
+      });
+    });
   </script>
 </body>
 </html>
