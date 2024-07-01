@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -15,7 +14,7 @@
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com" rel="preconnect">
   <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap" rel="stylesheet">
 
   <!-- Vendor CSS Files-->
   <link href="../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -35,9 +34,16 @@
       // function preventBack() {
       //   window.history.forward();
       // }
+      // function preventBack() {
+      //   window.history.forward();
+      // }
 
       // setTimeout(preventBack, 0);
+      // setTimeout(preventBack, 0);
 
+      // window.onunload = function() {
+      //   null;
+      // };
       // window.onunload = function() {
       //   null;
       // };
@@ -51,16 +57,11 @@
 <body class="index-page">
 
   <header id="header" class="header fixed-top">
-
     <div class="branding d-flex align-items-center">
-
       <div class="container position-relative d-flex align-items-center justify-content-between">
         <a href="../index.html" class="logo d-flex align-items-center">
-          <!-- Uncomment the line below if you also wish to use an image logo -->
-          <!-- <img src="assets/img/logo.png" alt=""> -->
           <h1 class="sitename">Votaciones ADUFA</h1>
         </a>
-
         <nav id="navmenu" class="navmenu">
           <ul>
             <li><a href="#about">Configuración</a></li>
@@ -73,32 +74,23 @@
           <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
         </nav>
       </div>
-
     </div>
-
   </header>
 
   <main class="main">
-
-    <!-- About Section -->
     <section id="about" class="about section">
-
-      <!-- Section Title -->
       <div class="container section-title" data-aos="fade-up">
         <span>Previsualización Votaciones<br></span>
         <h2>Previsualización Votaciones<br></h2>
-      </div><!-- End Section Title -->
-
+      </div>
       <div class="container">
-
         <div class="row px-0" style="margin-top: -50px;">
           <div class="col-lg-2 order-1 order-lg-1 content" data-aos="fade-up" data-aos-delay="200"></div>
           <div class="col-lg-8 order-2 order-lg-1 content imagenFondoESPE" data-aos="fade-up" data-aos-delay="200"></div>
           <div class="col-lg-2 order-2 order-lg-1 content" data-aos="fade-up" data-aos-delay="200"></div>
           <div class="col-lg-2 order-1 order-lg-1 content" data-aos="fade-up" data-aos-delay="200"></div>
           <div class="col-lg-8 order-2 order-lg-1 content form-container"data-aos="fade-up" data-aos-delay="200">
-            <p style="text-align: center; font-size: 12px;">En esta previsualización usted confirmará los candidatos ingresados
-              previamente. De esta precisa manera es como se desplegará al votante el formulario de votación.</p>
+            <p style="text-align: center; font-size: 12px;">En esta previsualización usted confirmará los candidatos ingresados previamente. De esta precisa manera es como se desplegará al votante el formulario de votación.</p>
             <div class="row">
               <div class="col-md-12">
                 <form id="votacionForm">
@@ -111,15 +103,10 @@
                 </form>
               </div>
             </div>
-            <!-- <a href="#" class="read-more"><span>Read More</span><i class="bi bi-arrow-right"></i></a> -->
           </div>
-
         </div>
-
       </div>
-
-    </section><!-- /About Section -->
-
+    </section>
   </main>
 
   <footer id="footer" class="footer position-relative"><br>
@@ -129,16 +116,10 @@
         <strong class="px-1 sitename">Asociación de Docentes de las Fuerzas Armadas</strong> <span> 2024</span>
       </div>
     </div>
-
   </footer>
 
-  <!-- Scroll Top -->
   <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
-
-  <!-- Preloader -->
   <div id="preloader"></div>
-
-  <!-- Vendor JS Files -->
   <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="../assets/vendor/php-email-form/validate.js"></script>
   <script src="../assets/vendor/aos/aos.js"></script>
@@ -146,14 +127,12 @@
   <script src="../assets/vendor/glightbox/js/glightbox.min.js"></script>
   <script src="../assets/vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
   <script src="../assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
-
-  <!-- Main JS File -->
   <script src="../assets/js/main.js"></script>
 
   <script>
     // Obtener nombres almacenados en localStorage
-    const formData  = JSON.parse(localStorage.getItem('formData')) || {};
-    const periodo = formData .periodo || ''; // Obtener el periodo ingresado
+    const formData = JSON.parse(localStorage.getItem('formData')) || {};
+    const periodo = formData.periodo || ''; // Obtener el periodo ingresado
 
     // Generar campos de radio para cada nombre
     const checkboxesContainer = document.getElementById('checkboxesContainer');
@@ -162,35 +141,34 @@
             <div style="background-color: rgba(0, 0, 0, 0.1); width: 100%; height: 15px;"></div>
           </div>`;
 
-    // Función para generar campos de radio por título
     function generateRadioFields(title, nombres) {
-        if (nombres.length === 0) {
-            return ''; // Si no hay nombres, retornar cadena vacía para no generar campos
-        }
-        let radioFieldsHtml = `<h4 style="color: var(--accent-color); padding-top: 15px; font-weight: bold;">${title}</h4><hr>`;
-        nombres.forEach((nombre, index) => {
-            radioFieldsHtml += `
-                <div>
-                    <input type="radio" id="${title.toLowerCase()}${index + 1}" name="${title.toLowerCase()}" value="${nombre}">
-                    <label for="${title.toLowerCase()}${index + 1}">${nombre}</label>
-                </div>
-            `;
-        });
-
-        // Agregar campo "NULO" al final
+      if (nombres.length === 0) {
+        return '';
+      }
+      let radioFieldsHtml = `<h4 style="color: var(--accent-color); padding-top: 15px; font-weight: bold;">${title}</h4><hr>`;
+      nombres.forEach((nombre, index) => {
         radioFieldsHtml += `
-            <div>
-                <input type="radio" id="${title.toLowerCase()}Nulo" name="${title.toLowerCase()}" value="NULO">
-                <label for="${title.toLowerCase()}Nulo">NULO</label>
-            </div>
-            <br><div style="background-color: white; width: 105%; margin-left:-20px">
-              <div style="background-color: rgba(0, 0, 0, 0.1); width: 100%; height: 15px;"></div>
-            </div>
+          <div>
+            <input type="radio" id="${title.toLowerCase()}${index + 1}" name="${title.toLowerCase()}" value="${nombre}">
+            <label for="${title.toLowerCase()}${index + 1}">${nombre}</label>
+          </div>
         `;
+      });
 
-        return radioFieldsHtml;
+      // Agregar campo "NULO" al final
+      radioFieldsHtml += `
+        <div>
+          <input type="radio" id="${title.toLowerCase()}Nulo" name="${title.toLowerCase()}" value="NULO">
+          <label for="${title.toLowerCase()}Nulo">NULO</label>
+        </div>
+        <br><div style="background-color: white; width: 105%; margin-left:-20px">
+          <div style="background-color: rgba(0, 0, 0, 0.1); width: 100%; height: 15px;"></div>
+        </div>
+      `;
+
+      return radioFieldsHtml;
     }
-  
+
     // Generar campos de radio para cada dignidad
     checkboxesContainer.innerHTML += generateRadioFields('Presidente', formData.presidente || []);
     checkboxesContainer.innerHTML += generateRadioFields('Vicepresidente', formData.vicepresidente || []);
@@ -244,7 +222,5 @@
       });
     });
   </script>
-
 </body>
-
 </html>
