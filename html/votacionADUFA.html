@@ -105,7 +105,7 @@
                   <div id="checkboxesContainer"></div>
                   <br>
                   <div class="col-sm-12 text-center">
-                    <button type="submit" class="read-more">Generar Formulario</button>
+                    <button type="submit" class="read-more">Enviar Voto</button>
                     <button type="button" class="read-more" id="backButton">Regresar</button>
                   </div>
                 </form>
@@ -151,33 +151,43 @@
   <script src="../assets/js/main.js"></script>
 
   <script>
-    // Obtener nombres almacenados en localStorage
-    const formData  = JSON.parse(localStorage.getItem('formData')) || {};
-    const periodo = formData .periodo || ''; // Obtener el periodo ingresado
+    // Obtener el período desde la URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const periodo = urlParams.get('periodo');
+    const usuario = localStorage.getItem('usuario');
 
-    // Generar campos de radio para cada nombre
-    const checkboxesContainer = document.getElementById('checkboxesContainer');
-    checkboxesContainer.innerHTML += `<h4 style:"font-weight: bold;">Periodo ${periodo}</h4><form id="secondForm">
-      <br><div style="background-color: white; width: 105%; margin-left: -20px;">
-            <div style="background-color: rgba(0, 0, 0, 0.1); width: 100%; height: 15px;"></div>
-          </div>`;
+    // Ahora puedes usar 'periodo' para cualquier lógica que necesites en tu página HTML
+    console.log(`Período seleccionado: ${periodo}`);
 
-    // Función para generar campos de radio por título
-    function generateRadioFields(title, nombres) {
-        if (nombres.length === 0) {
-            return ''; // Si no hay nombres, retornar cadena vacía para no generar campos
-        }
-        let radioFieldsHtml = `<h4 style="color: var(--accent-color); padding-top: 15px; font-weight: bold;">${title}</h4><hr>`;
-        nombres.forEach((nombre, index) => {
+    // Función para obtener y mostrar los candidatos
+    async function getCandidates(periodo) {
+      try {
+        const response = await fetch(`/obtener-candidatos?periodo=${periodo}`);
+        const data = await response.json();
+
+        // Renderizar los datos obtenidos en el formulario
+        const checkboxesContainer = document.getElementById('checkboxesContainer');
+        checkboxesContainer.innerHTML += `<h4 style:"font-weight: bold;">Periodo ${periodo}</h4><form id="secondForm">
+        <br><div style="background-color: white; width: 105%; margin-left: -20px;">
+              <div style="background-color: rgba(0, 0, 0, 0.1); width: 100%; height: 15px;"></div>
+            </div>`;
+
+        // Función para generar campos de radio por título
+        function generateRadioFields(title, nombres) {
+          if (nombres.length === 0) {
+            return '';
+          }
+          let radioFieldsHtml = `<h4 style="color: var(--accent-color); padding-top: 15px; font-weight: bold;">${title}</h4><hr>`;
+          nombres.forEach((nombre, index) => {
             radioFieldsHtml += `
-                <div>
-                    <input type="radio" id="${title.toLowerCase()}${index + 1}" name="${title.toLowerCase()}" value="${nombre}">
-                    <label for="${title.toLowerCase()}${index + 1}">${nombre}</label>
-                </div>
+              <div>
+                <input type="radio" id="${title.toLowerCase()}${index + 1}" name="${title.toLowerCase()}" value="${nombre.ID_US}">
+                <label for="${title.toLowerCase()}${index + 1}">${nombre.ID_US}</label>
+              </div>
             `;
-        });
+          });
 
-        // Agregar campo "NULO" al final
+          // Agregar campo "NULO" al final
         radioFieldsHtml += `
             <div>
                 <input type="radio" id="${title.toLowerCase()}Nulo" name="${title.toLowerCase()}" value="NULO">
@@ -187,43 +197,101 @@
               <div style="background-color: rgba(0, 0, 0, 0.1); width: 100%; height: 15px;"></div>
             </div>
         `;
+          return radioFieldsHtml;
+        }
 
-        return radioFieldsHtml;
+        checkboxesContainer.innerHTML += generateRadioFields('Presidente', data.presidente || []);
+        checkboxesContainer.innerHTML += generateRadioFields('Vicepresidente', data.vicepresidente || []);
+        checkboxesContainer.innerHTML += generateRadioFields('Secretario', data.secretario || []);
+        checkboxesContainer.innerHTML += generateRadioFields('Subsecretario', data.subsecretario || []);
+
+      } catch (error) {
+        console.error('Error:', error);
+      }
     }
-  
-    // Generar campos de radio para cada dignidad
-    checkboxesContainer.innerHTML += generateRadioFields('Presidente', formData.presidente || []);
-    checkboxesContainer.innerHTML += generateRadioFields('Vicepresidente', formData.vicepresidente || []);
-    checkboxesContainer.innerHTML += generateRadioFields('Secretario', formData.secretario || []);
-    checkboxesContainer.innerHTML += generateRadioFields('Subsecretario', formData.subsecretario || []);
-  
-    // Evento para regresar al formulario anterior
-    const backButton = document.getElementById('backButton');
-    backButton.addEventListener('click', function() {
-        window.history.back();
+
+    // Llamar a la función para obtener y mostrar candidatos al cargar la página
+    document.addEventListener('DOMContentLoaded', () => {
+      getCandidates(periodo);
     });
 
+    // Evento para regresar al formulario anterior
+    const backButton = document.getElementById('backButton');
+    backButton.addEventListener('click', () => {
+      window.history.back();
+    });
 
-    // Evento para enviar el formulario
+    // Llamar a la API para verificar si el usuario ha votado
+    async function verificarVoto(usuario, periodo) {
+      try {
+        const response = await fetch(`/verificar-voto?usuario=${usuario}&periodo=${periodo}`);
+        const data = await response.json();
+
+        if (data.votoRealizado) {
+          // Si el usuario ya ha votado para este período, ocultar el formulario y mostrar el mensaje
+          document.getElementById('votacionForm').style.display = 'none';
+
+          const messageContainer = document.createElement('div');
+          messageContainer.classList.add('alert', 'alert-info', 'mt-3');
+          messageContainer.innerHTML = `<strong>Período:</strong> ${periodo}<br>Usted ya ha ejercido su voto para estas elecciones.`;
+
+          document.querySelector('.form-container').appendChild(messageContainer);
+        }
+      } catch (error) {
+        console.error('Error al verificar voto:', error);
+      }
+    }
+
+    // Verificar si el usuario ha votado para este período
+    if (usuario && periodo) {
+      verificarVoto(usuario, periodo);
+    }
+
+    // Evento para enviar el formulario (puedes agregar tu lógica aquí)
     const votacionForm = document.getElementById('votacionForm');
-    votacionForm.addEventListener('submit', function(event) {
-        event.preventDefault();
-        const formData = JSON.parse(localStorage.getItem('formData'));
-        fetch('/guardar-candidatos', {
+    votacionForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      try {
+        // Obtener el usuario desde localStorage
+        const usuario = localStorage.getItem('usuario');
+
+        // Obtener los datos del formulario
+        const formData = {
+          periodo: periodo,
+          presidente: obtenerCandidatosSeleccionados('presidente'),
+          vicepresidente: obtenerCandidatosSeleccionados('vicepresidente'),
+          secretario: obtenerCandidatosSeleccionados('secretario'),
+          subsecretario: obtenerCandidatosSeleccionados('subsecretario')
+        };
+
+        // Enviar la solicitud POST al servidor
+        const response = await fetch('/guardar-votos', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify(formData)
-        })
-        .then(response => response.text())
-        .then(data => {
-          alert(data);
-        })
-        .catch(error => {
-          console.error('Error:', error);
+          body: JSON.stringify({ usuario, formData })
         });
+
+        const result = await response.json();
+        alert(result.message);
+        // Recargar la página después de mostrar la alerta
+        window.location.reload();
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Error al guardar los votos');
+      }
     });
+
+    // Función para obtener los candidatos seleccionados por tipo
+    function obtenerCandidatosSeleccionados(tipo) {
+      const candidatos = [];
+      const checkboxes = document.querySelectorAll(`input[name=${tipo.toLowerCase()}]:checked`);
+      checkboxes.forEach((checkbox) => {
+        candidatos.push(checkbox.value);
+      });
+      return candidatos;
+    }
     document.addEventListener('DOMContentLoaded', (event) => {
       // Obtener el nombre del usuario desde el LocalStorage
       const usuario = localStorage.getItem('usuario');
