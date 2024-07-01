@@ -26,7 +26,7 @@
 
   <!-- Main CSS File -->
   <link href="../assets/css/main.css" rel="stylesheet">
-  <script>
+  <!-- <script>
     const rol = localStorage.getItem('rol');
       if (!rol || rol !== '1'|| rol !== '2') {
         window.location.href = '/';
@@ -45,7 +45,7 @@
       window.addEventListener('popstate', function(event) {
         history.pushState(null, "", location.href);
       });
-  </script>
+  </script> -->
 </head>
 
 <body class="index-page">
@@ -64,23 +64,11 @@
         <nav id="navmenu" class="navmenu">
           <ul>
             <li><a href="#about">Configuración</a></li>
-            <!-- <li class="dropdown"><a href="#"><span>Dropdown</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+            <li class="dropdown"><a href="#"><span id="userDropdown">USUARIO</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
               <ul>
-                <li><a href="#">Dropdown 1</a></li>
-                <li class="dropdown"><a href="#"><span>Deep Dropdown</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-                  <ul>
-                    <li><a href="#">Deep Dropdown 1</a></li>
-                    <li><a href="#">Deep Dropdown 2</a></li>
-                    <li><a href="#">Deep Dropdown 3</a></li>
-                    <li><a href="#">Deep Dropdown 4</a></li>
-                    <li><a href="#">Deep Dropdown 5</a></li>
-                  </ul>
-                </li>
-                <li><a href="#">Dropdown 2</a></li>
-                <li><a href="#">Dropdown 3</a></li>
-                <li><a href="#">Dropdown 4</a></li>
+                <li><a href="#">Cerrar Sesión</a></li>
               </ul>
-            </li> -->
+            </li>
           </ul>
           <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
         </nav>
@@ -108,8 +96,8 @@
           <div class="col-lg-8 order-2 order-lg-1 content imagenFondoESPE" data-aos="fade-up" data-aos-delay="200"></div>
           <div class="col-lg-2 order-2 order-lg-1 content" data-aos="fade-up" data-aos-delay="200"></div>
           <div class="col-lg-2 order-1 order-lg-1 content" data-aos="fade-up" data-aos-delay="200"></div>
-          <div class="col-lg-8 order-2 order-lg-1 content form-container" data-aos="fade-up" data-aos-delay="200">
-            <p style="color: rgba(255, 255, 255, 0.8); text-align: center; font-size: 12px;">En esta previsualización usted confirmará los candidatos ingresados
+          <div class="col-lg-8 order-2 order-lg-1 content form-container"data-aos="fade-up" data-aos-delay="200">
+            <p style="text-align: center; font-size: 12px;">En esta previsualización usted confirmará los candidatos ingresados
               previamente. De esta precisa manera es como se desplegará al votante el formulario de votación.</p>
             <div class="row">
               <div class="col-md-12">
@@ -164,121 +152,75 @@
 
   <script>
     // Obtener nombres almacenados en localStorage
-    const names = JSON.parse(localStorage.getItem('formData')) || {};
-    const periodo = names.periodo || ''; // Obtener el periodo ingresado
+    const formData  = JSON.parse(localStorage.getItem('formData')) || {};
+    const periodo = formData .periodo || ''; // Obtener el periodo ingresado
 
     // Generar campos de radio para cada nombre
     const checkboxesContainer = document.getElementById('checkboxesContainer');
-    checkboxesContainer.innerHTML += `<h4 style="color: aliceblue;">Periodo ${periodo}</h4><form id="secondForm">
-      <br><div style="background-color: white; width: 760px; margin-left: -20px;">
-            <div style="background-color: rgba(0, 0, 0, 0.1); width: 760px; height: 15px;"></div>
+    checkboxesContainer.innerHTML += `<h4 style:"font-weight: bold;">Periodo ${periodo}</h4><form id="secondForm">
+      <br><div style="background-color: white; width: 105%; margin-left: -20px;">
+            <div style="background-color: rgba(0, 0, 0, 0.1); width: 100%; height: 15px;"></div>
           </div>`;
-    
+
     // Función para generar campos de radio por título
-    function generateRadioFieldsByTitle(title, titleKey) {
-      if (Object.keys(names).some(key => key.startsWith(titleKey))) {
-        checkboxesContainer.innerHTML += `<h4 style="color: var(--accent-color); padding-top: 15px;">${title}s</h4><hr>`;
-        
-        Object.keys(names).forEach(key => {
-          if (key.startsWith(titleKey)) {
-
-            const radioGroup = document.createElement('div');
-            radioGroup.classList.add('form-check', 'mb-3'); // Agregar clases de Bootstrap para form-check y margen-bottom
-  
-            const radio = document.createElement('input');
-            radio.type = 'radio';
-            radio.classList.add('form-check-input'); // Agregar clase de Bootstrap para form-check-input
-            radio.name = titleKey; // Usar el título como nombre del grupo de radio
-            radio.value = key;
-  
-            const label = document.createElement('label');
-            label.classList.add('form-check-label'); // Agregar clase de Bootstrap para form-check-label
-            label.textContent = names[key];
-  
-            radioGroup.appendChild(radio);
-            radioGroup.appendChild(label);
-            checkboxesContainer.appendChild(radioGroup);
-          }
+    function generateRadioFields(title, nombres) {
+        if (nombres.length === 0) {
+            return ''; // Si no hay nombres, retornar cadena vacía para no generar campos
+        }
+        let radioFieldsHtml = `<h4 style="color: var(--accent-color); padding-top: 15px; font-weight: bold;">${title}</h4><hr>`;
+        nombres.forEach((nombre, index) => {
+            radioFieldsHtml += `
+                <div>
+                    <input type="radio" id="${title.toLowerCase()}${index + 1}" name="${title.toLowerCase()}" value="${nombre}">
+                    <label for="${title.toLowerCase()}${index + 1}">${nombre}</label>
+                </div>
+            `;
         });
-  
-        // Añadir opción "NULO"
-        const radioGroupNulo = document.createElement('div');
-        radioGroupNulo.classList.add('form-check', 'mb-3'); // Agregar clases de Bootstrap para form-check y margen-bottom
-  
-        const radioNulo = document.createElement('input');
-        radioNulo.type = 'radio';
-        radioNulo.classList.add('form-check-input'); // Agregar clase de Bootstrap para form-check-input
-        radioNulo.name = titleKey; // Usar el título como nombre del grupo de radio
-        radioNulo.value = 'nulo'; // Valor para indicar opción "NULO"
-  
-        const labelNulo = document.createElement('label');
-        labelNulo.classList.add('form-check-label'); // Agregar clase de Bootstrap para form-check-label
-        labelNulo.textContent = 'NULO';
-  
-        radioGroupNulo.appendChild(radioNulo);
-        radioGroupNulo.appendChild(labelNulo);
-        checkboxesContainer.appendChild(radioGroupNulo);
-        checkboxesContainer.innerHTML += `<br><div style="background-color: white; width: 760px; margin-left: -20px;">
-            <div style="background-color: rgba(0, 0, 0, 0.1); width: 760px; height: 15px;"></div>
-          </div>`;
-      }
 
-      document.getElementById('backButton').addEventListener('click', function() {
-        // Guardar el estado actual del formulario en localStorage (si es necesario)
-        const formData = new FormData(document.getElementById('votacionForm'));
-        const formDataObj = {};
-        formData.forEach((value, key) => {
-          formDataObj[key] = value;
-        });
-        localStorage.setItem('votacionFormData', JSON.stringify(formDataObj));
+        // Agregar campo "NULO" al final
+        radioFieldsHtml += `
+            <div>
+                <input type="radio" id="${title.toLowerCase()}Nulo" name="${title.toLowerCase()}" value="NULO">
+                <label for="${title.toLowerCase()}Nulo">NULO</label>
+            </div>
+            <br><div style="background-color: white; width: 105%; margin-left:-20px">
+              <div style="background-color: rgba(0, 0, 0, 0.1); width: 100%; height: 15px;"></div>
+            </div>
+        `;
 
-        // Redirigir a index.html
-        window.location.href = '../index.html';
-      });
+        return radioFieldsHtml;
     }
   
-    // Generar campos de radio para cada título
-    generateRadioFieldsByTitle('Presidente', 'presidente');
-    generateRadioFieldsByTitle('Vicepresidente', 'vicepresidente');
-    generateRadioFieldsByTitle('Secretario', 'secretario');
-    generateRadioFieldsByTitle('Subsecretario', 'subsecretario');
+    // Generar campos de radio para cada dignidad
+    checkboxesContainer.innerHTML += generateRadioFields('Presidente', formData.presidente || []);
+    checkboxesContainer.innerHTML += generateRadioFields('Vicepresidente', formData.vicepresidente || []);
+    checkboxesContainer.innerHTML += generateRadioFields('Secretario', formData.secretario || []);
+    checkboxesContainer.innerHTML += generateRadioFields('Subsecretario', formData.subsecretario || []);
   
-    // Evento submit del formulario de votación
-    document.getElementById('votacionForm').addEventListener('submit', function(event) {
-      event.preventDefault();
+    // Evento para regresar al formulario anterior
+    const backButton = document.getElementById('backButton');
+    backButton.addEventListener('click', function() {
+        window.history.back();
+    });
 
-      // Obtener el valor seleccionado para cada título
-      const presidente = document.querySelector('input[name="presidente"]:checked');
-      const vicepresidente = document.querySelector('input[name="vicepresidente"]:checked');
-      const secretario = document.querySelector('input[name="secretario"]:checked');
-      const subsecretario = document.querySelector('input[name="subsecretario"]:checked');
 
-      // Preparar los datos para enviar
-      const resultados = {
-        periodo: periodo,
-        presidente: presidente ? names[presidente.value] : 'NO SE CONSIDERO DIGNIDAD',
-        vicepresidente: vicepresidente ? names[vicepresidente.value] : 'NO SE CONSIDERO DIGNIDAD',
-        secretario: secretario ? names[secretario.value] : 'NO SE CONSIDERO DIGNIDAD',
-        subsecretario: subsecretario ? names[subsecretario.value] : 'NO SE CONSIDERO DIGNIDAD'
-      };
-
-      // Aquí podrías enviar los resultados a través de una solicitud HTTP, almacenarlos en localStorage, etc.
-      console.log('Resultados:', resultados);
-      alert('¡Votos enviados con éxito!');
-
-      // Ejemplo de cómo almacenar los resultados en localStorage para usarlos en otra página
-      //localStorage.setItem('resultadosVotacion', JSON.stringify(resultados));
-
-      // Opcional: Redirigir a otra página
-      // window.location.href = 'otra_pagina.html';
+    // Evento para enviar el formulario (puedes agregar tu lógica aquí)
+    const votacionForm = document.getElementById('votacionForm');
+    votacionForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+        // Aquí puedes manejar el envío del formulario
+        // Por ejemplo, obtener los valores seleccionados de los radios
+        // y enviarlos mediante AJAX
+        console.log('Formulario enviado');
+    });
+    // Código JavaScript para obtener y actualizar el nombre de usuario en el menú
+    document.addEventListener('DOMContentLoaded', () => {
+      const username = sessionStorage.getItem('username'); // Obtener el nombre de usuario de la sesión
+      if (username) {
+        document.getElementById('userDropdown').innerText = username; // Actualizar el nombre de usuario en el menú
+      }
     });
   </script>
-  
-  
-  
-  
-  
-  
 
 </body>
 
