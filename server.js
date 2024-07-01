@@ -44,15 +44,20 @@ app.post('/login', async (req, res) => {
     );
 
     if (result.rows.length > 0) {
-      // Autenticación exitosa
       const role = result.rows[0][0];
       console.log('Usuario autenticado:', { role });
 
-      // Guardar rol en localStorage mediante la respuesta
       res.send(`
         <script>
           localStorage.setItem('rol', '${role}');
-          window.location.href = '${role === '1' ? '/html/configuracion.html' : '/html/votacion.html'}';
+          if (${role} === 1) {
+            window.location.href = '/html/configuracion.html';
+          } else if (${role} === 2) {
+            window.location.href = '/html/votacion.html';
+          } else {
+            alert("Rol desconocido");
+            window.location.href = '/';
+          }
         </script>
       `);
     } else {
@@ -61,7 +66,7 @@ app.post('/login', async (req, res) => {
 
     await connection.close();
   } catch (err) {
-    console.error('Database error:', err);
+    console.error(err);
     res.status(500).send('Error en el servidor');
   }
 });

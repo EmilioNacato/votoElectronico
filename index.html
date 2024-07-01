@@ -16,9 +16,9 @@
     document.addEventListener("DOMContentLoaded", function() {
       const rol = localStorage.getItem('rol');
       if (rol === '1') {
-        window.location.href = '/html/configuracion.html';
+        window.location.replace('/html/configuracion.html');
       } else if (rol === '2') {
-        window.location.href = '/html/votacion.html';
+        window.location.replace('/html/votacion.html');
       }
 
       function preventBack() {
