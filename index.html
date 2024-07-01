@@ -18,7 +18,11 @@
       if (rol === '1') {
         window.location.replace('/html/configuracion.html');
       } else if (rol === '2') {
-        window.location.replace('/html/votacion.html');
+        // Obtener el parámetro 'periodo' de la URL actual
+        const urlParams = new URLSearchParams(window.location.search);
+        const periodoenviado = urlParams.get('periodo');
+        // Redirigir a votacion.html con el parámetro 'periodo'
+        window.location.href = `/html/votacionADUFA.html?periodo=${periodoenviado}`;
       }
 
       function preventBack() {

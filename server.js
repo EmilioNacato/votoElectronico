@@ -30,6 +30,7 @@ const dbConfig = {
 // Ruta para el inicio de sesión
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
+  const periodo = req.query.periodo;
   console.log(`Usuario: ${username}, Contraseña: ${password}`);
   if (!username || !password) {
     res.send('<script>alert("Usuario y contraseña son requeridos"); window.location.href="/";</script>');
@@ -48,6 +49,8 @@ app.post('/login', async (req, res) => {
       const usuario = username;
       console.log('Usuario autenticado:', { role });
 
+      console.log(periodo);
+
       res.send(`
         <script>
           localStorage.setItem('rol', '${role}');
@@ -55,14 +58,14 @@ app.post('/login', async (req, res) => {
           if (${role} === 1) {
             window.location.href = '/html/configuracion.html';
           } else if (${role} === 2) {
-            window.location.href = '/html/votacion.html';
+            // Redirigir a votacionADUFA.html con el parámetro 'periodo'
+            window.location.href = '/html/votacionADUFA.html?periodo=${periodo}';
           } else {
             alert("Rol desconocido");
             window.location.href = '/';
           }
-          // window.location.href = '${role === '1' ? '/html/configuracion.html' : '/html/votacion.html'}';
         </script>
-      `);
+        `);
     } else {
       res.send('<script>alert("Credenciales incorrectas"); window.location.href="/";</script>');
     }
@@ -127,6 +130,7 @@ app.post('/guardar-candidatos', async (req, res) => {
     await connection.close();
 
     res.status(200).send('Datos guardados correctamente');
+    console.log("Candidatos guardados en la Base de Datos");
   } catch (err) {
     console.error('Error al guardar los datos en la base de datos:', err);
     res.status(500).send('Error en el servidor');

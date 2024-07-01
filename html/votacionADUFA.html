@@ -300,6 +300,9 @@
       if (usuario) {
         // Actualizar el contenido del elemento con el ID 'username-display'
         document.getElementById('username-display').innerHTML = `${usuario} <i class="bi bi-chevron-down toggle-dropdown"></i>`;
+      } else{
+        // Redireccionar al index.html si no existe el usuario
+        window.location.href = '../index.html?periodo=' + periodo;
       }
       // Manejar el clic en el botón de "Cerrar Sesión"
       document.getElementById('logout-button').addEventListener('click', function() {
