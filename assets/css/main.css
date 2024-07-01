@@ -45,7 +45,8 @@
 --------------------------------------------------------------*/
 body {
   color: var(--default-color);
-  background-color: var(--background-color);
+  /* background-color: var(--background-color); */
+  background-color: #ebeeef;
   font-family: var(--default-font);
 }
 
@@ -759,11 +760,11 @@ h6 {
 --------------------------------------------------------------*/
 
 .form-container {
-  background-color: #242424;
-  color: white;
+  /* background-color: #242424; */
+  /* color: white; */
   padding: 20px;
   border-radius: 0 0 5px 5px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 .form-container input, .form-container select, .form-container button {
   color: black; /* Cambia el color del texto de los campos de entrada y botones a negro */
@@ -777,7 +778,8 @@ h6 {
   background-repeat:  no-repeat;
   margin-right: -50px;
   border-radius: 5px 5px 0 0;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  /* box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); */
+  /* box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.2), 4px 0 8px rgba(0, 0, 0, 0.2), -4px 0 8px rgba(0, 0, 0, 0.2); */
 }
 
 .radio-group {

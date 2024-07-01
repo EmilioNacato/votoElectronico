@@ -1,5 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
 const oracledb = require('oracledb');
 const path = require('path');
 
@@ -8,6 +10,12 @@ const PORT = 3000;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser()); // Usa cookie-parser
+app.use(session({
+  secret: 'supersecret', // Clave secreta para firmar la cookie
+  resave: true,
+  saveUninitialized: true
+}));
 
 // Configurar Express para servir archivos estáticos desde el directorio raíz
 app.use(express.static(path.join(__dirname, '/')));
@@ -22,7 +30,7 @@ const dbConfig = {
 // Ruta para el inicio de sesión
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
-
+  console.log(`Usuario: ${username}, Contraseña: ${password}`);
   if (!username || !password) {
     res.send('<script>alert("Usuario y contraseña son requeridos"); window.location.href="/";</script>');
     return;
@@ -36,7 +44,9 @@ app.post('/login', async (req, res) => {
     );
 
     if (result.rows.length > 0) {
+      // Autenticación exitosa
       const role = result.rows[0][0];
+      req.session.username = username; // Guarda el nombre de usuario en la sesión
       if (role === '1') {
         res.redirect('/html/configuracion.html');
       } else if (role === '2') {

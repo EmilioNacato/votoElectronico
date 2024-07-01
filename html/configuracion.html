@@ -25,11 +25,6 @@
 
   <!-- Main CSS File -->
   <link href="../assets/css/main.css" rel="stylesheet">
-
-  <script language="JavaScript">
-    javascript:window.history.forward(1);
-    javascript:window.history.back(1);
-  </script>
 </head>
 
 <body class="index-page">
@@ -42,6 +37,11 @@
         <nav id="navmenu" class="navmenu">
           <ul>
             <li><a href="#about">Configuración</a></li>
+            <li class="dropdown"><a href="#"><span id="userDropdown"></span>H <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+              <ul>
+                <li><a href="#">Cerrar Sesión</a></li>
+              </ul>
+            </li>
           </ul>
           <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
         </nav>
@@ -66,7 +66,7 @@
             <div class="row">
               <div class="col-md-12">
                 <form id="initialForm">
-                  <p style="color: rgba(255, 255, 255, 0.8); text-align: center; font-size: 12px;">En este espacio especificará el periodo de elecciones al cual desea implementar la votación electrónica, además se seleccionarán el número de candidatos por cada una de las necesidades que requiera. En caso de no requerir de alguna dignidad ponga una cantidad 0.</p>
+                  <p style="text-align: center; font-size: 12px;">En este espacio especificará el periodo de elecciones al cual desea implementar la votación electrónica, además se seleccionarán el número de candidatos por cada una de las necesidades que requiera. En caso de no requerir de alguna dignidad ponga una cantidad 0.</p>
                   <div class="form-group row my-2">
                     <label for="periodo" class="col-sm-4 col-form-label">Periodo de Elecciones</label>
                     <div class="col-sm-8">
@@ -74,8 +74,8 @@
                     </div>
                   </div>
                   <hr>
-                  <div style="background-color: white; width: 760px; margin-left: -20px;">
-                    <div style="background-color: rgba(0, 0, 0, 0.1); width: 760px; height: 15px;"></div>
+                  <div style="background-color: white; width: 105%; margin-left: -20px;">
+                    <div style="background-color: rgba(0, 0, 0, 0.1); width: 100%; height: 15px;"></div>
                   </div>
                   <div class="form-group row my-2">
                     <label for="presidente" class="col-sm-4 col-form-label" style="color: var(--accent-color);font-size: 20px;">Dignidades</label>
@@ -158,10 +158,10 @@
       const numSubsecretario = parseInt(document.getElementById('numSubsecretario').value);
   
       let secondFormHtml = `
-      <p style="color: rgba(255, 255, 255, 0.8); text-align: center; font-size: 12px;">En este apartado se ingresarán cada uno de los candidatos postulados, separados por dignidades para su correcta selección.</p>
-      <h4 style="color: aliceblue;">Periodo ${periodo}</h4><form id="secondForm">
-        <br><div style="background-color: white; width: 760px; margin-left: -20px;">
-            <div style="background-color: rgba(0, 0, 0, 0.1); width: 760px; height: 15px;"></div>
+      <p style="text-align: center; font-size: 12px;">En este apartado se ingresarán cada uno de los candidatos postulados, separados por dignidades para su correcta selección.</p>
+      <h4>Periodo ${periodo}</h4><form id="secondForm">
+        <br><div style="background-color: white; width: 105%; margin-left: -20px;">
+            <div style="background-color: rgba(0, 0, 0, 0.1); width: 100%; height: 15px;"></div>
           </div>`;
   
       function generateFields(title, num, lista) {
@@ -176,8 +176,8 @@
                 </div>
               </div>`;
           }
-          secondFormHtml += `<br><div style="background-color: white; width: 760px; margin-left: -20px;">
-            <div style="background-color: rgba(0, 0, 0, 0.1); width: 760px; height: 15px;"></div>
+          secondFormHtml += `<br><div style="background-color: white; width: 105%; margin-left: -20px;">
+            <div style="background-color: rgba(0, 0, 0, 0.1); width: 100%; height: 15px;"></div>
           </div>`;
         }
       }
@@ -201,51 +201,77 @@
       document.getElementById('initialForm').style.display = 'none';
       document.getElementById('secondFormContainer').style.display = 'block';
 
-      const savedData = JSON.parse(localStorage.getItem('votacionFormData'));
-      if (savedData) {
-        Object.keys(savedData).forEach(key => {
-          const input = document.querySelector(`#secondForm [name="${key}"]`);
-          if (input) {
-            input.value = savedData[key];
-          }
-        });
-      }
       document.getElementById('backButton').addEventListener('click', function() {
         document.getElementById('secondFormContainer').style.display = 'none';
         document.getElementById('initialForm').style.display = 'block';
       });
   
+      // document.getElementById('secondForm').addEventListener('submit', function(event) {
+      //   event.preventDefault();
+  
+      //   const formData = new FormData(this);
+      //   formData.append('periodo', periodo);
+  
+      //   const formDataObj = {};
+      //   formData.forEach((value, key) => {
+      //     formDataObj[key] = value;
+      //   });
+  
+      //   localStorage.setItem('formData', JSON.stringify(formDataObj));
+  
+      //   window.location.href = 'votacion.html';
+      // });
       document.getElementById('secondForm').addEventListener('submit', function(event) {
         event.preventDefault();
-  
-        const formData = new FormData(this);
-        formData.append('periodo', periodo);
-  
-        const formDataObj = {};
-        formData.forEach((value, key) => {
-          formDataObj[key] = value;
-        });
-  
-        localStorage.setItem('formData', JSON.stringify(formDataObj));
-  
-        window.location.href = 'html/votacion.html';
+
+        // Obtener valores de los campos de texto
+        const periodo = document.getElementById('periodo').value;
+        const numPresidente = parseInt(document.getElementById('numPresidente').value);
+        const numVicepresidente = parseInt(document.getElementById('numVicepresidente').value);
+        const numSecretario = parseInt(document.getElementById('numSecretario').value);
+        const numSubsecretario = parseInt(document.getElementById('numSubsecretario').value);
+
+        // Crear objetos para cada dignidad
+        const presidentes = [];
+        const vicepresidentes = [];
+        const secretarios = [];
+        const subsecretarios = [];
+
+        function obtenerNombres(title, num, lista) {
+            for (let i = 1; i <= num; i++) {
+                lista.push(document.getElementsByName(`${title.toLowerCase()}${i}`)[0].value);
+            }
+        }
+
+        obtenerNombres('Presidente', numPresidente, presidentes);
+        obtenerNombres('Vicepresidente', numVicepresidente, vicepresidentes);
+        obtenerNombres('Secretario', numSecretario, secretarios);
+        obtenerNombres('Subsecretario', numSubsecretario, subsecretarios);
+
+        // Construir el objeto final con todas las dignidades
+        const datos = {
+            periodo: periodo,
+            presidente: presidentes,
+            vicepresidente: vicepresidentes,
+            secretario: secretarios,
+            subsecretario: subsecretarios
+        };
+
+        localStorage.setItem('formData', JSON.stringify(datos));
+
+        window.location.href = 'votacion.html';
       });
     });
 
-    if (window.location.search.includes('from=votacion')) {
-      document.getElementById('initialForm').style.display = 'none';
-      document.getElementById('secondFormContainer').style.display = 'block';
+    document.addEventListener('DOMContentLoaded', function() {
+      // Comprobar si hay nombre de usuario almacenado en sesión
+      let username = 'Nombre';
 
-      const savedData = JSON.parse(localStorage.getItem('votacionFormData'));
-      if (savedData) {
-        Object.keys(savedData).forEach(key => {
-          const input = document.querySelector(`#secondForm [name="${key}"]`);
-          if (input) {
-            input.value = savedData[key];
-          }
-        });
+      // Actualizar el contenido del elemento userDropdown si hay un nombre de usuario
+      if (username) {
+        document.getElementById('userDropdown').textContent = username;
       }
-    }
+    });  
   </script>
 </body>
 </html>
