@@ -14,16 +14,23 @@
   <link rel="stylesheet" type="text/css" href="../assets/css/login.css">
   <script>
     document.addEventListener("DOMContentLoaded", function() {
+      const rol = localStorage.getItem('rol');
+      if (rol === '1') {
+        window.location.href = '/html/configuracion.html';
+      } else if (rol === '2') {
+        window.location.href = '/html/votacion.html';
+      }
+
       function preventBack() {
         window.history.forward();
       }
-      
+
       setTimeout(preventBack, 0);
-      
+
       window.onunload = function() {
         null;
       };
-      
+
       window.addEventListener('popstate', function(event) {
         history.pushState(null, "", location.href);
       });
