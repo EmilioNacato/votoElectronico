@@ -46,22 +46,44 @@ app.post('/login', async (req, res) => {
     if (result.rows.length > 0) {
       // Autenticación exitosa
       const role = result.rows[0][0];
-      // req.session.username = username; // Guarda el nombre de usuario en la sesión
-      if (role === '1') {
-        res.redirect('/html/configuracion.html');
-      } else if (role === '2') {
-        res.redirect('/html/votacion.html');
-      } else {
-        res.send('<script>alert("Rol desconocido"); window.location.href="/";</script>');
-      }
+      console.log('Usuario autenticado:', { role });
+
+      // Guardar rol en localStorage mediante la respuesta
+      res.send(`
+        <script>
+          localStorage.setItem('rol', '${role}');
+          window.location.href = '${role === '1' ? '/html/configuracion.html' : '/html/votacion.html'}';
+        </script>
+      `);
     } else {
       res.send('<script>alert("Credenciales incorrectas"); window.location.href="/";</script>');
     }
 
     await connection.close();
   } catch (err) {
-    console.error(err);
+    console.error('Database error:', err);
     res.status(500).send('Error en el servidor');
+  }
+});
+
+// Ruta para obtener los usuarios
+app.get('/api/usuarios', async (req, res) => {
+  try {
+    const connection = await oracledb.getConnection(dbConfig);
+    const result = await connection.execute(
+      `SELECT NOMBRE_US, APELLIDO_US FROM USUARIOS`
+    );
+    await connection.close();
+
+    const usuarios = result.rows.map(row => ({
+      nombres: row[0],
+      apellidos: row[1]
+    }));
+
+    res.json(usuarios);
+  } catch (err) {
+    console.error('Database error:', err);
+    res.status(500).send('Error al obtener los usuarios');
   }
 });
 

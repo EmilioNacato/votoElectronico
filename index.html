@@ -4,11 +4,38 @@
   <title>Votaciones Login ADUFA</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Cache-Control" content="no-store" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
   <link rel="icon" type="image/png" href="images/icons/favicon.ico"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/linearicons/1.0.0/icon-font.min.css">
   <link rel="stylesheet" type="text/css" href="../assets/css/util.css">
   <link rel="stylesheet" type="text/css" href="../assets/css/login.css">
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const rol = localStorage.getItem('rol');
+      if (rol === '1') {
+        window.location.href = '/html/configuracion.html';
+      } else if (rol === '2') {
+        window.location.href = '/html/votacion.html';
+      }
+
+      function preventBack() {
+        window.history.forward();
+      }
+
+      setTimeout(preventBack, 0);
+
+      window.onunload = function() {
+        null;
+      };
+
+      window.addEventListener('popstate', function(event) {
+        history.pushState(null, "", location.href);
+      });
+    });
+  </script>
 </head>
 <body>
   <div class="limiter">

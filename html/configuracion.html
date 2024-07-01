@@ -6,6 +6,9 @@
   <title>Configuración - Votaciones ADUFA</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
+  <meta http-equiv="Cache-Control" content="no-store" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
 
   <!-- Favicons -->
   <link href="../assets/img/favicon.png" rel="icon">
@@ -14,7 +17,7 @@
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com" rel="preconnect">
   <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap" rel="stylesheet">
 
   <!-- Vendor CSS Files-->
   <link href="../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -25,6 +28,143 @@
 
   <!-- Main CSS File -->
   <link href="../assets/css/main.css" rel="stylesheet">
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const rol = localStorage.getItem('rol');
+      // if (!rol || rol !== '1') {
+      //   window.location.href = '/';
+      // }
+
+      // function preventBack() {
+      //   window.history.forward();
+      // }
+
+      // setTimeout(preventBack, 0);
+
+      // window.onunload = function() {
+      //   null;
+      // };
+
+      // window.addEventListener('popstate', function(event) {
+      //   history.pushState(null, "", location.href);
+      // });
+
+      // Obtener usuarios y llenar los campos de selección
+      fetch('/api/usuarios')
+        .then(response => response.json())
+        .then(data => {
+          console.log(data); // Depuración: muestra los datos en consola
+          const userSelects = document.querySelectorAll('.user-select');
+          userSelects.forEach(select => {
+            data.forEach(user => {
+              const option = document.createElement('option');
+              option.value = `${user.nombres} ${user.apellidos}`;
+              option.text = `${user.nombres} ${user.apellidos}`;
+              select.appendChild(option);
+            });
+          });
+        })
+        .catch(err => console.error('Error al obtener los usuarios:', err));
+    });
+
+    document.getElementById('initialForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      const periodo = document.getElementById('periodo').value;
+      const numPresidente = parseInt(document.getElementById('numPresidente').value);
+      const numVicepresidente = parseInt(document.getElementById('numVicepresidente').value);
+      const numSecretario = parseInt(document.getElementById('numSecretario').value);
+      const numSubsecretario = parseInt(document.getElementById('numSubsecretario').value);
+
+      let secondFormHtml = `
+      <p style="color: rgba(255, 255, 255, 0.8); text-align: center; font-size: 12px;">En este apartado se ingresarán cada uno de los candidatos postulados, separados por dignidades para su correcta selección.</p>
+      <h4 style="color: aliceblue;">Periodo ${periodo}</h4><form id="secondForm">
+        <br><div style="background-color: white; width: 760px; margin-left: -20px;">
+            <div style="background-color: rgba(0, 0, 0, 0.1); width: 760px; height: 15px;"></div>
+          </div>`;
+
+      function generateFields(title, num, lista) {
+        if (num > 0) {
+          secondFormHtml += `<h4 style="color: var(--accent-color); padding-top: 15px;">${title}s</h4><hr>`;
+          for (let i = 1; i <= num; i++) {
+            secondFormHtml +=
+              `<div class="form-group row my-2">
+                <label class="col-sm-4 col-form-label">${title} ${i}</label>
+                <div class="col-sm-8">
+                  <select name="${title.toLowerCase()}${i}" class="form-control user-select" required>
+                    <option value="" disabled selected>Seleccione un ${title.toLowerCase()}</option>
+                  </select>
+                </div>
+              </div>`;
+          }
+          secondFormHtml += `<br><div style="background-color: white; width: 760px; margin-left: -20px;">
+            <div style="background-color: rgba(0, 0, 0, 0.1); width: 760px; height: 15px;"></div>
+          </div>`;
+        }
+      }
+
+      generateFields('Presidente', numPresidente, 0);
+      generateFields('Vicepresidente', numVicepresidente, 0);
+      generateFields('Secretario', numSecretario, 0);
+      generateFields('Subsecretario', numSubsecretario, 1);
+
+      secondFormHtml += `<br>
+        <div class="form-group row my-2">
+          <div class="col-sm-12 text-center">
+            <button type="submit" class="read-more" id="submitButton">Enviar</button>
+            <button type="button" class="read-more" id="backButton">Regresar</button>
+          </div>
+        </div>
+      </form>`;
+
+      document.getElementById('secondFormContainer').innerHTML = secondFormHtml;
+
+      document.getElementById('initialForm').style.display = 'none';
+      document.getElementById('secondFormContainer').style.display = 'block';
+
+      
+      document.getElementById('backButton').addEventListener('click', function() {
+        document.getElementById('secondFormContainer').style.display = 'none';
+        document.getElementById('initialForm').style.display = 'block';
+      });
+
+      document.getElementById('secondForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const formData = new FormData(this);
+        formData.append('periodo', periodo);
+
+        const formDataObj = {};
+        formData.forEach((value, key) => {
+          formDataObj[key] = value;
+        });
+
+        localStorage.setItem('formData', JSON.stringify(formDataObj));
+
+        window.location.href = '/html/votacion.html';
+      });
+
+      // Obtener usuarios y llenar los campos de selección nuevamente
+      fetch('/api/usuarios')
+        .then(response => response.json())
+        .then(data => {
+          console.log(data); // Depuración: muestra los datos en consola
+          const userSelects = document.querySelectorAll('.user-select');
+          userSelects.forEach(select => {
+            data.forEach(user => {
+              const option = document.createElement('option');
+              option.value = `${user.nombres} ${user.apellidos}`;
+              option.text = `${user.nombres} ${user.apellidos}`;
+              select.appendChild(option);
+            });
+          });
+        })
+        .catch(err => console.error('Error al obtener los usuarios:', err));
+    });
+
+    
+  </script>
 </head>
 
 <body class="index-page">
@@ -172,16 +312,18 @@
               `<div class="form-group row my-2">
                 <label class="col-sm-4 col-form-label">${title} ${i}</label>
                 <div class="col-sm-8">
-                  <input type="text" name="${title.toLowerCase()}${i}" class="form-control" placeholder="Nombre del ${title.toLowerCase()} ${i}" required>
+                  <select name="${title.toLowerCase()}${i}" class="form-control user-select" required>
+                    <option value="" disabled selected>Seleccione un ${title.toLowerCase()}</option>
+                  </select>
                 </div>
-              </div>`;
+                </div>`;
           }
           secondFormHtml += `<br><div style="background-color: white; width: 105%; margin-left: -20px;">
             <div style="background-color: rgba(0, 0, 0, 0.1); width: 100%; height: 15px;"></div>
-          </div>`;
+            </div>`;
         }
       }
-  
+
       generateFields('Presidente', numPresidente, 0);
       generateFields('Vicepresidente', numVicepresidente, 0);
       generateFields('Secretario', numSecretario, 0);
@@ -261,6 +403,23 @@
 
         window.location.href = 'votacion.html';
       });
+
+      // Obtener usuarios y llenar los campos de selección nuevamente
+      fetch('/api/usuarios')
+        .then(response => response.json())
+        .then(data => {
+          console.log(data); // Depuración: muestra los datos en consola
+          const userSelects = document.querySelectorAll('.user-select');
+          userSelects.forEach(select => {
+            data.forEach(user => {
+              const option = document.createElement('option');
+              option.value = `${user.nombres} ${user.apellidos}`;
+              option.text = `${user.nombres} ${user.apellidos}`;
+              select.appendChild(option);
+            });
+          });
+        })
+        .catch(err => console.error('Error al obtener los usuarios:', err));
     });
 
     document.addEventListener('DOMContentLoaded', function() {
