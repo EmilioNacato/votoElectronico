@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-// const cookieParser = require('cookie-parser');
+// const cookieParser = require('cookie-parser'); hola
 // const session = require('express-session');
 const oracledb = require('oracledb');
 const path = require('path');
