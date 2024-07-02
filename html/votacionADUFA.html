@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>Previsualización - Votaciones ADUFA</title>
+  <title>Votaciones ADUFA</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -85,8 +85,8 @@
 
       <!-- Section Title -->
       <div class="container section-title" data-aos="fade-up">
-        <span>Previsualización Votaciones<br></span>
-        <h2>Previsualización Votaciones<br></h2>
+        <span>Votaciones Directiva ADUFA<br></span>
+        <h2>Votaciones Directiva ADUFA<br></h2>
       </div><!-- End Section Title -->
 
       <div class="container">
@@ -97,8 +97,8 @@
           <div class="col-lg-2 order-2 order-lg-1 content" data-aos="fade-up" data-aos-delay="200"></div>
           <div class="col-lg-2 order-1 order-lg-1 content" data-aos="fade-up" data-aos-delay="200"></div>
           <div class="col-lg-8 order-2 order-lg-1 content form-container"data-aos="fade-up" data-aos-delay="200">
-            <p style="text-align: center; font-size: 12px;">En esta previsualización usted confirmará los candidatos ingresados
-              previamente. De esta precisa manera es como se desplegará al votante el formulario de votación.</p>
+            <p id="MensajePrevio" style="text-align: center; font-size: 12px;">En este proceso electoral usted votará por los candidatos postulados
+              para la directiva de la asociación de docentes de las Fuerzas Armadas "ADUFA" en el periodo actual.</p>
             <div class="row">
               <div class="col-md-12">
                 <form id="votacionForm">
@@ -188,15 +188,15 @@
           });
 
           // Agregar campo "NULO" al final
-        radioFieldsHtml += `
-            <div>
-                <input type="radio" id="${title.toLowerCase()}Nulo" name="${title.toLowerCase()}" value="NULO">
-                <label for="${title.toLowerCase()}Nulo">NULO</label>
-            </div>
-            <br><div style="background-color: white; width: 105%; margin-left:-20px">
-              <div style="background-color: rgba(0, 0, 0, 0.1); width: 100%; height: 15px;"></div>
-            </div>
-        `;
+          radioFieldsHtml += `
+              <div>
+                  <input type="radio" id="${title.toLowerCase()}Nulo" name="${title.toLowerCase()}" value="NULO">
+                  <label for="${title.toLowerCase()}Nulo">NULO</label>
+              </div>
+              <br><div style="background-color: white; width: 105%; margin-left:-20px">
+                <div style="background-color: rgba(0, 0, 0, 0.1); width: 100%; height: 15px;"></div>
+              </div>
+          `;
           return radioFieldsHtml;
         }
 
@@ -230,7 +230,7 @@
         if (data.votoRealizado) {
           // Si el usuario ya ha votado para este período, ocultar el formulario y mostrar el mensaje
           document.getElementById('votacionForm').style.display = 'none';
-
+          document.getElementById('MensajePrevio').style.display = 'none';
           const messageContainer = document.createElement('div');
           messageContainer.classList.add('alert', 'alert-info', 'mt-3');
           messageContainer.innerHTML = `<strong>Período:</strong> ${periodo}<br>Usted ya ha ejercido su voto para estas elecciones.`;

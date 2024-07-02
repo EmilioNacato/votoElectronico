@@ -86,8 +86,15 @@ app.post('/guardar-candidatos', async (req, res) => {
     const insertQuery = `INSERT INTO CANDIDATOS (ID_US, PERIODO_POSTULACION, DIGNIDAD_CAND, ESTADO_CAND) 
                          VALUES (:id_us, :periodo_postulacion, :dignidad_cand, :estado_cand)`;
     
+    const NuloQuery = `INSERT INTO CANDIDATOS (ID_US, PERIODO_POSTULACION, DIGNIDAD_CAND, ESTADO_CAND) 
+                         VALUES ('nulo', :periodo_postulacion, 'nula', 1)`;
+    
     const period = formData.periodo;
     const estado = 1; // Asumimos que el estado es siempre 1 según tu descripción
+
+    console.log("Voy a guardar Nulo");
+    await connection.execute(NuloQuery, [period]);
+    console.log("Guarde Nulo");
 
     const dignidades = ['presidente', 'vicepresidente', 'secretario', 'subsecretario'];
 
@@ -164,6 +171,9 @@ app.post('/guardar-votos', async (req, res) => {
 
     const insertQuery = `INSERT INTO VOTOS (VOT_ID_US, ID_US, PERIODO_POSTULACION, FECHA_VOTACION) 
                          VALUES (:vot_id_us, :id_us, :periodo_postulacion, CURRENT_TIMESTAMP)`;
+    
+    const insertNuloQuery = `INSERT INTO VOTOS (VOT_ID_US, ID_US, PERIODO_POSTULACION, FECHA_VOTACION) 
+                         VALUES (:vot_id_us, 'nulo', :periodo_postulacion, CURRENT_TIMESTAMP)`;
 
     const vot_id_us = usuario; // Variable Usuario de local storage
     const period = formData.periodo;
@@ -173,28 +183,35 @@ app.post('/guardar-votos', async (req, res) => {
     for (const dignidad of dignidades) {
       const candidatos = formData[dignidad];
       for (const candidato of candidatos) {
-        // Separar el nombre y apellido del candidato
-        const [nombre, apellido] = candidato.split(', '); // Separar por coma
-
-        // Limpiar espacios alrededor de los nombres
-        const cleanNombre = nombre.trim();
-        const cleanApellido = apellido.trim();
-
-        // Consulta para obtener el ID_US del candidato
-        const result = await connection.execute(
-          `SELECT ID_US FROM USUARIOS WHERE NOMBRE_US = :nombre AND APELLIDO_US = :apellido`,
-          [cleanNombre, cleanApellido]
-        );
-        
-        if (result.rows.length > 0) {
-          const id_us = result.rows[0][0];
-          //console.log(`Votante: ${vot_id_us}, Candidato: ${id_us}, Período: ${period}`);
-          // Insertar en la tabla VOTOS
-          await connection.execute(insertQuery, [vot_id_us, id_us, period]);
-          //console.log(`Se insertó el voto para ${cleanNombre} ${cleanApellido}`);
+        if (candidato.toLowerCase() === 'nulo') {
+          // Insertar voto nulo
+          console.log("Se considero voto nulo");
+          await connection.execute(insertNuloQuery, [vot_id_us, period]);
+          //console.log(`Se insertó un voto nulo para la dignidad de ${dignidad}`);
         } else {
-          console.log(`No se encontró el usuario con nombre ${cleanNombre} y apellido ${cleanApellido}`);
-          // Puedes manejar aquí lo que deseas hacer si no se encuentra el usuario
+          // Separar el nombre y apellido del candidato
+          const [nombre, apellido] = candidato.split(', '); // Separar por coma
+
+          // Limpiar espacios alrededor de los nombres
+          const cleanNombre = nombre.trim();
+          const cleanApellido = apellido.trim();
+
+          // Consulta para obtener el ID_US del candidato
+          const result = await connection.execute(
+            `SELECT ID_US FROM USUARIOS WHERE NOMBRE_US = :nombre AND APELLIDO_US = :apellido`,
+            [cleanNombre, cleanApellido]
+          );
+          
+          if (result.rows.length > 0) {
+            const id_us = result.rows[0][0];
+            //console.log(`Votante: ${vot_id_us}, Candidato: ${id_us}, Período: ${period}`);
+            // Insertar en la tabla VOTOS
+            await connection.execute(insertQuery, [vot_id_us, id_us, period]);
+            //console.log(`Se insertó el voto para ${cleanNombre} ${cleanApellido}`);
+          } else {
+            console.log(`No se encontró el usuario con nombre ${cleanNombre} y apellido ${cleanApellido}`);
+            // Puedes manejar aquí lo que deseas hacer si no se encuentra el usuario
+          }
         }
       }
     }
@@ -228,7 +245,7 @@ app.get('/obtener-candidatos', async (req, res) => {
       SELECT u.NOMBRE_US || ', ' || u.APELLIDO_US AS NOMBRE_COMPLETO, c.DIGNIDAD_CAND
       FROM CANDIDATOS c
       JOIN USUARIOS u ON c.ID_US = u.ID_US
-      WHERE c.PERIODO_POSTULACION = :periodo
+      WHERE c.PERIODO_POSTULACION = :periodo AND u.ID_US <> 'nulo'
     `;
     //console.log('Ejecutando consulta SQL...');
     
@@ -320,7 +337,7 @@ app.get('/api/usuarios', async (req, res) => {
   try {
     const connection = await oracledb.getConnection(dbConfig);
     const result = await connection.execute(
-      `SELECT NOMBRE_US, APELLIDO_US FROM USUARIOS`
+      `SELECT NOMBRE_US, APELLIDO_US FROM USUARIOS WHERE ID_US <> 'nulo'`
     );
     await connection.close();
 
