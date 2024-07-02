@@ -353,6 +353,70 @@ app.get('/api/usuarios', async (req, res) => {
   }
 });
 
+// Ruta para obtener los periodos
+app.get('/api/periodos', async (req, res) => {
+  try {
+    const connection = await oracledb.getConnection(dbConfig);
+    const result = await connection.execute(`SELECT DISTINCT PERIODO_POSTULACION FROM CANDIDATOS`);
+    await connection.close();
+
+    const periodos = result.rows.map(row => row[0]);
+
+    res.json(periodos);
+  } catch (err) {
+    console.error('Database error:', err);
+    res.status(500).send('Error al obtener los periodos');
+  }
+});
+
+// Ruta para obtener los resultados por período
+app.get('/api/resultados', async (req, res) => {
+  const periodo = req.query.periodo;
+
+  try {
+    const connection = await oracledb.getConnection(dbConfig);
+
+    const query = `
+      SELECT u.NOMBRE_US || ', ' || u.APELLIDO_US AS NOMBRE_COMPLETO, c.DIGNIDAD_CAND, COUNT(v.VOT_ID_US) AS VOTOS
+      FROM VOTOS v
+      JOIN USUARIOS u ON v.ID_US = u.ID_US
+      JOIN CANDIDATOS c ON u.ID_US = c.ID_US AND v.PERIODO_POSTULACION = c.PERIODO_POSTULACION
+      WHERE v.PERIODO_POSTULACION = :periodo
+      GROUP BY u.NOMBRE_US || ', ' || u.APELLIDO_US, c.DIGNIDAD_CAND
+      UNION ALL
+      SELECT 'Nulo' AS NOMBRE_COMPLETO, c.DIGNIDAD_CAND, COUNT(*) AS VOTOS
+      FROM VOTOS v
+      JOIN CANDIDATOS c ON v.ID_US = 'nulo' AND v.PERIODO_POSTULACION = c.PERIODO_POSTULACION AND c.ID_US = 'nulo'
+      WHERE v.PERIODO_POSTULACION = :periodo
+      GROUP BY c.DIGNIDAD_CAND
+    `;
+
+    const result = await connection.execute(query, [periodo, periodo]);
+    await connection.close();
+
+    const resultados = {
+      presidente: [],
+      vicepresidente: [],
+      secretario: [],
+      subsecretario: []
+    };
+
+    result.rows.forEach(row => {
+      const [nombre, dignidad, votos] = row;
+      if (!resultados[dignidad]) {
+        resultados[dignidad] = [];
+      }
+      resultados[dignidad].push({ nombre, votos });
+    });
+
+    res.json(resultados);
+  } catch (err) {
+    console.error('Error al obtener los resultados:', err);
+    res.status(500).send('Error al obtener los resultados');
+  }
+});
+
+
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
