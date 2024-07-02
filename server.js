@@ -29,9 +29,8 @@ const dbConfig = {
 
 // Ruta para el inicio de sesión
 app.post('/login', async (req, res) => {
-  const { username, password } = req.body;
-  const periodo = req.query.periodo;
-  console.log(`Usuario: ${username}, Contraseña: ${password}`);
+  const { username, password,periodo } = req.body;
+  console.log(`Usuario: ${username}, Contraseña: ${password}, Periodo: ${periodo}`);
   if (!username || !password) {
     res.send('<script>alert("Usuario y contraseña son requeridos"); window.location.href="/";</script>');
     return;
@@ -174,6 +173,12 @@ app.post('/guardar-votos', async (req, res) => {
     
     const insertNuloQuery = `INSERT INTO VOTOS (VOT_ID_US, ID_US, PERIODO_POSTULACION, FECHA_VOTACION) 
                          VALUES (:vot_id_us, 'nulo', :periodo_postulacion, CURRENT_TIMESTAMP)`;
+    
+    const checkNuloQuery = `SELECT ID_US 
+                         FROM VOTOS 
+                         WHERE VOT_ID_US = :vot_id_us 
+                           AND ID_US = 'nulo' 
+                           AND PERIODO_POSTULACION = :periodo_postulacion`;
 
     const vot_id_us = usuario; // Variable Usuario de local storage
     const period = formData.periodo;
@@ -185,9 +190,18 @@ app.post('/guardar-votos', async (req, res) => {
       for (const candidato of candidatos) {
         if (candidato.toLowerCase() === 'nulo') {
           // Insertar voto nulo
-          console.log("Se considero voto nulo");
-          await connection.execute(insertNuloQuery, [vot_id_us, period]);
-          //console.log(`Se insertó un voto nulo para la dignidad de ${dignidad}`);
+          //console.log("Se considero voto nulo");
+          // Verificar si ya existe un voto nulo para el mismo periodo
+          const nuloResult = await connection.execute(checkNuloQuery, [vot_id_us, period]);
+          
+          //console.log(nuloResult);
+          if (nuloResult.rows.length == 0) {
+            // Insertar voto nulo si no existe previamente
+            console.log("Se insertara voto nulo");
+            await connection.execute(insertNuloQuery, [vot_id_us, period]);
+          } else {
+            console.log("Ya existe un voto nulo para el periodo especificado.");
+          }
         } else {
           // Separar el nombre y apellido del candidato
           const [nombre, apellido] = candidato.split(', '); // Separar por coma
@@ -357,7 +371,7 @@ app.get('/api/usuarios', async (req, res) => {
 app.get('/api/periodos', async (req, res) => {
   try {
     const connection = await oracledb.getConnection(dbConfig);
-    const result = await connection.execute(`SELECT DISTINCT PERIODO_POSTULACION FROM CANDIDATOS`);
+    const result = await connection.execute(`SELECT DISTINCT PERIODO_POSTULACION FROM CANDIDATOS ORDER BY PERIODO_POSTULACION DESC`);
     await connection.close();
 
     const periodos = result.rows.map(row => row[0]);
@@ -376,6 +390,17 @@ app.get('/api/resultados', async (req, res) => {
   try {
     const connection = await oracledb.getConnection(dbConfig);
 
+    // Consulta para obtener el número de votantes únicos
+    const queryNumVotantesUnicos = `
+      SELECT COUNT(DISTINCT v.VOT_ID_US) AS NUMERO_VOTANTES_UNICOS
+      FROM VOTOS v
+      WHERE v.PERIODO_POSTULACION = :periodo
+    `;
+
+    const resultNumVotantesUnicos = await connection.execute(queryNumVotantesUnicos, [periodo]);
+    const numeroVotantesUnicos = resultNumVotantesUnicos.rows[0][0]; // Número de votantes únicos
+    console.log(`Número de votantes únicos para el período ${periodo}: ${numeroVotantesUnicos}`);
+
     const query = `
       SELECT u.NOMBRE_US || ', ' || u.APELLIDO_US AS NOMBRE_COMPLETO, c.DIGNIDAD_CAND, COUNT(v.VOT_ID_US) AS VOTOS
       FROM VOTOS v
@@ -383,15 +408,9 @@ app.get('/api/resultados', async (req, res) => {
       JOIN CANDIDATOS c ON u.ID_US = c.ID_US AND v.PERIODO_POSTULACION = c.PERIODO_POSTULACION
       WHERE v.PERIODO_POSTULACION = :periodo
       GROUP BY u.NOMBRE_US || ', ' || u.APELLIDO_US, c.DIGNIDAD_CAND
-      UNION ALL
-      SELECT 'Nulo' AS NOMBRE_COMPLETO, c.DIGNIDAD_CAND, COUNT(*) AS VOTOS
-      FROM VOTOS v
-      JOIN CANDIDATOS c ON v.ID_US = 'nulo' AND v.PERIODO_POSTULACION = c.PERIODO_POSTULACION AND c.ID_US = 'nulo'
-      WHERE v.PERIODO_POSTULACION = :periodo
-      GROUP BY c.DIGNIDAD_CAND
     `;
 
-    const result = await connection.execute(query, [periodo, periodo]);
+    const result = await connection.execute(query, [periodo]);
     await connection.close();
 
     const resultados = {
@@ -407,6 +426,17 @@ app.get('/api/resultados', async (req, res) => {
         resultados[dignidad] = [];
       }
       resultados[dignidad].push({ nombre, votos });
+    });
+
+    Object.keys(resultados).forEach(dignidad => {
+      const sumaVotos = resultados[dignidad].reduce((total, candidato) => total + candidato.votos, 0);
+      console.log(`${dignidad}: ${sumaVotos}`);
+      if (sumaVotos > 0) {
+        resultados[dignidad].push({ nombre: 'Nulo', votos: numeroVotantesUnicos - sumaVotos });
+      }
+      else {
+        resultados[dignidad].push({ nombre: 'Nulo', votos: 0 });
+      }
     });
 
     res.json(resultados);
